@@ -1,0 +1,16 @@
+name: CI for Java Invoice
+on: [push]
+jobs:
+  lint:
+    name: Check code with checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.version }}
+          distribution: 'adopt'
+      - name: Checkstyle
+        run: mvn checkstyle:check
+  
