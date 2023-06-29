@@ -15,11 +15,11 @@ jobs:
         run: mvn checkstyle:check
   test:
     name: Unit tests
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
         version: [ 8, 13, 15 ]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
