@@ -7,7 +7,13 @@ import java.util.Map;
 import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
-    private Map<Product, Integer> products = new HashMap<Product, Integer>();
+    private static int invoiceCounter = 0; // to generate unique invoice numbers
+    private int invoiceNumber = invoiceCounter++;
+    private Map<Product, Integer> products = new HashMap<>();
+
+    public int getInvoiceNumber() {
+        return invoiceNumber;
+    }
 
     public void addProduct(Product product) {
         addProduct(product, 1);
