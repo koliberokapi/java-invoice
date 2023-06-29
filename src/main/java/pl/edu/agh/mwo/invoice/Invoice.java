@@ -47,4 +47,10 @@ public class Invoice {
         }
         return totalGross;
     }
+    public String print() {
+        String invoiceString = "";
+        return invoiceString;
+    }
+
+
 }

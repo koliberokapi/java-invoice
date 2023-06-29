@@ -127,11 +127,85 @@ public class InvoiceTest {
 
     @Test
     public void testInvoiceNumber() {
-        Assert.assertTrue("testInvoiceNumber",invoice.getInvoiceNumber() >= 0);
+        Assert.assertTrue(invoice.getInvoiceNumber() >= 0);
     }
     @Test
     public void testDifferenceBetweenTwoInvoicesNumbers() {
         Invoice secondInvoice = new Invoice();
-        Assert.assertSame("testDifferenceBetweenTwoInvoicesNumbers",1, secondInvoice.getInvoiceNumber() - invoice.getInvoiceNumber());
+        Assert.assertSame(1, secondInvoice.getInvoiceNumber() - invoice.getInvoiceNumber());
+    }
+    @Test
+    public void testInvoicePrintingWithTwoDifferentProducts() {
+        Product onions = new TaxFreeProduct("Warzywa", new BigDecimal("10"));
+        Product apples = new TaxFreeProduct("Owoce", new BigDecimal("15"));
+        invoice.addProduct(onions);
+        invoice.addProduct(apples);
+        Assert.assertEquals("", invoice.print());
+    }
+
+    @Test
+    public void testInvoicePrintingWithManySameProducts() {
+        Product onions = new TaxFreeProduct("Warzywa", BigDecimal.valueOf(10));
+        invoice.addProduct(onions, 100);
+        Assert.assertEquals("", invoice.print());
+    }
+
+    @Test
+    public void testInvoicePrintigWithTheSameSubtotalAndTotalIfTaxIsZero() {
+        Product taxFreeProduct = new TaxFreeProduct("Warzywa", new BigDecimal("199.99"));
+        invoice.addProduct(taxFreeProduct);
+        Assert.assertEquals("", invoice.print());
+    }
+
+    @Test
+    public void testInvoicePrintingForManyProducts() {
+        invoice.addProduct(new TaxFreeProduct("Owoce", new BigDecimal("200")));
+        invoice.addProduct(new DairyProduct("Maslanka", new BigDecimal("100")));
+        invoice.addProduct(new OtherProduct("Wino", new BigDecimal("10")));
+        Assert.assertEquals("",invoice.print());
+    }
+
+    @Test
+    public void testInvoicePrintingWithProperValueForManyProduct() {
+        // tax: 0
+        invoice.addProduct(new TaxFreeProduct("Pampersy", new BigDecimal("200")));
+        // tax: 8
+        invoice.addProduct(new DairyProduct("Kefir", new BigDecimal("100")));
+        // tax: 2.30
+        invoice.addProduct(new OtherProduct("Piwko", new BigDecimal("10")));
+        Assert.assertEquals("", invoice.print());
+    }
+
+    @Test
+    public void testInvoicePrintingWithTotalValueForManyProduct() {
+        // price with tax: 200
+        invoice.addProduct(new TaxFreeProduct("Maskotki", new BigDecimal("200")));
+        // price with tax: 108
+        invoice.addProduct(new DairyProduct("Maslo", new BigDecimal("100")));
+        // price with tax: 12.30
+        invoice.addProduct(new OtherProduct("Chipsy", new BigDecimal("10")));
+        Assert.assertEquals("", invoice.print());
+    }
+
+    @Test
+    public void testInvoicePrintingSubtotalWithQuantityMoreThanOne() {
+        // 2x kubek - price: 10
+        invoice.addProduct(new TaxFreeProduct("Kubek", new BigDecimal("5")), 2);
+        // 3x kozi serek - price: 30
+        invoice.addProduct(new DairyProduct("Kozi Serek", new BigDecimal("10")), 3);
+        // 1000x pinezka - price: 10
+        invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
+        Assert.assertEquals("", invoice.print());
+    }
+
+    @Test
+    public void testInvoicePrintingWithQuantityMoreThanOne() {
+        // 2x chleb - price with tax: 10
+        invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5")), 2);
+        // 3x chedar - price with tax: 32.40
+        invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
+        // 1000x pinezka - price with tax: 12.30
+        invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
+        Assert.assertEquals("",invoice.print());
     }
 }
