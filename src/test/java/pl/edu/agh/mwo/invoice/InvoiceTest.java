@@ -143,8 +143,8 @@ public class InvoiceTest {
         Assert.assertEquals("Invoice Number: 13\n" +
                 "Product, Amount, Tax, Neto Price, Netto Value\n" +
                 "\n" +
-                "Warzywa, 1.0, 10.0, 10.0\n" +
                 "Owoce, 1.0, 15.0, 15.0\n" +
+                "Warzywa, 1.0, 10.0, 10.0\n" +
                 "\n" +
                 "\n" +
                 "Total Products: 2\n" +
@@ -193,9 +193,9 @@ public class InvoiceTest {
         Assert.assertEquals("Invoice Number: 24\n" +
                 "Product, Amount, Tax, Neto Price, Netto Value\n" +
                 "\n" +
+                "Maslanka, 1.0, 100.0, 100.0\n" +
                 "Owoce, 1.0, 200.0, 200.0\n" +
                 "Wino, 1.0, 10.0, 10.0\n" +
-                "Maslanka, 1.0, 100.0, 100.0\n" +
                 "\n" +
                 "\n" +
                 "Total Products: 3\n" +
@@ -216,8 +216,8 @@ public class InvoiceTest {
                 "Product, Amount, Tax, Neto Price, Netto Value\n" +
                 "\n" +
                 "Kefir, 1.0, 100.0, 100.0\n" +
-                "Piwko, 1.0, 10.0, 10.0\n" +
                 "Pampersy, 1.0, 200.0, 200.0\n" +
+                "Piwko, 1.0, 10.0, 10.0\n" +
                 "\n" +
                 "\n" +
                 "Total Products: 3\n" +
@@ -237,9 +237,9 @@ public class InvoiceTest {
         Assert.assertEquals("Invoice Number: 16\n" +
                 "Product, Amount, Tax, Neto Price, Netto Value\n" +
                 "\n" +
-                "Maslo, 1.0, 100.0, 100.0\n" +
                 "Chipsy, 1.0, 10.0, 10.0\n" +
                 "Maskotki, 1.0, 200.0, 200.0\n" +
+                "Maslo, 1.0, 100.0, 100.0\n" +
                 "\n" +
                 "\n" +
                 "Total Products: 3\n" +
@@ -259,9 +259,9 @@ public class InvoiceTest {
         Assert.assertEquals("Invoice Number: 18\n" +
                 "Product, Amount, Tax, Neto Price, Netto Value\n" +
                 "\n" +
-                "Pinezka, 1000.0, 0.01, 10.0\n" +
                 "Kozi Serek, 3.0, 10.0, 30.0\n" +
                 "Kubek, 2.0, 5.0, 10.0\n" +
+                "Pinezka, 1000.0, 0.01, 10.0\n" +
                 "\n" +
                 "\n" +
                 "Total Products: 3\n" +

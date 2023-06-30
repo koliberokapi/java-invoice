@@ -1,8 +1,7 @@
 package pl.edu.agh.mwo.invoice;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -55,7 +54,7 @@ public class Invoice {
 
     public String print() {
         String invoiceSummary = "Invoice Number: " + getInvoiceNumber() + "\n"
-                                + "Product, Amount, Tax, Neto Price, Netto Value" + "\n\n";
+                + "Product, Amount, Tax, Neto Price, Netto Value" + "\n\n";
 
         String productsDetail = products.entrySet().stream()
                 .map(entry -> entry.getKey().getName()
@@ -63,13 +62,14 @@ public class Invoice {
                         + ", " + entry.getKey().getPrice().doubleValue()
                         + ", " + entry.getKey().getPrice().doubleValue()
                         * entry.getValue().doubleValue())
+                .sorted()
                 .collect(Collectors.joining("\n"));
 
         String totalProducts = "\n\n" + "Total Products: " + products.size();
 
         String totalAmountDetail = "Total Gross Amount: " + getGrossTotal().doubleValue() + "\n"
-                                    + "Total Netto Amount: " + getNetTotal().doubleValue() +  "\n"
-                                    + "Total Tax Amount: " + getTaxTotal().doubleValue();
+                + "Total Netto Amount: " + getNetTotal().doubleValue() +  "\n"
+                + "Total Tax Amount: " + getTaxTotal().doubleValue();
 
 
 
