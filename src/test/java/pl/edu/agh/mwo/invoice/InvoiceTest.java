@@ -140,21 +140,49 @@ public class InvoiceTest {
         Product apples = new TaxFreeProduct("Owoce", new BigDecimal("15"));
         invoice.addProduct(onions);
         invoice.addProduct(apples);
-        Assert.assertEquals("", invoice.print());
+        Assert.assertEquals("Invoice Number: 13\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Warzywa, 1.0, 10.0, 10.0\n" +
+                "Owoce, 1.0, 15.0, 15.0\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 2\n" +
+                "Total Gross Amount: 25.0\n" +
+                "Total Netto Amount: 25.0\n" +
+                "Total Tax Amount: 0.0", invoice.print());
     }
 
     @Test
     public void testInvoicePrintingWithManySameProducts() {
         Product onions = new TaxFreeProduct("Warzywa", BigDecimal.valueOf(10));
         invoice.addProduct(onions, 100);
-        Assert.assertEquals("", invoice.print());
+        Assert.assertEquals("Invoice Number: 23\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Warzywa, 100.0, 10.0, 1000.0\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 1\n" +
+                "Total Gross Amount: 1000.0\n" +
+                "Total Netto Amount: 1000.0\n" +
+                "Total Tax Amount: 0.0", invoice.print());
     }
 
     @Test
     public void testInvoicePrintigWithTheSameSubtotalAndTotalIfTaxIsZero() {
         Product taxFreeProduct = new TaxFreeProduct("Warzywa", new BigDecimal("199.99"));
         invoice.addProduct(taxFreeProduct);
-        Assert.assertEquals("", invoice.print());
+        Assert.assertEquals("Invoice Number: 15\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Warzywa, 1.0, 199.99, 199.99\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 1\n" +
+                "Total Gross Amount: 199.99\n" +
+                "Total Netto Amount: 199.99\n" +
+                "Total Tax Amount: 0.0", invoice.print());
     }
 
     @Test
@@ -162,7 +190,18 @@ public class InvoiceTest {
         invoice.addProduct(new TaxFreeProduct("Owoce", new BigDecimal("200")));
         invoice.addProduct(new DairyProduct("Maslanka", new BigDecimal("100")));
         invoice.addProduct(new OtherProduct("Wino", new BigDecimal("10")));
-        Assert.assertEquals("",invoice.print());
+        Assert.assertEquals("Invoice Number: 24\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Owoce, 1.0, 200.0, 200.0\n" +
+                "Wino, 1.0, 10.0, 10.0\n" +
+                "Maslanka, 1.0, 100.0, 100.0\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 3\n" +
+                "Total Gross Amount: 320.3\n" +
+                "Total Netto Amount: 310.0\n" +
+                "Total Tax Amount: 10.3",invoice.print());
     }
 
     @Test
@@ -173,7 +212,18 @@ public class InvoiceTest {
         invoice.addProduct(new DairyProduct("Kefir", new BigDecimal("100")));
         // tax: 2.30
         invoice.addProduct(new OtherProduct("Piwko", new BigDecimal("10")));
-        Assert.assertEquals("", invoice.print());
+        Assert.assertEquals("Invoice Number: 20\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Kefir, 1.0, 100.0, 100.0\n" +
+                "Piwko, 1.0, 10.0, 10.0\n" +
+                "Pampersy, 1.0, 200.0, 200.0\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 3\n" +
+                "Total Gross Amount: 320.3\n" +
+                "Total Netto Amount: 310.0\n" +
+                "Total Tax Amount: 10.3", invoice.print());
     }
 
     @Test
@@ -184,7 +234,18 @@ public class InvoiceTest {
         invoice.addProduct(new DairyProduct("Maslo", new BigDecimal("100")));
         // price with tax: 12.30
         invoice.addProduct(new OtherProduct("Chipsy", new BigDecimal("10")));
-        Assert.assertEquals("", invoice.print());
+        Assert.assertEquals("Invoice Number: 16\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Maslo, 1.0, 100.0, 100.0\n" +
+                "Chipsy, 1.0, 10.0, 10.0\n" +
+                "Maskotki, 1.0, 200.0, 200.0\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 3\n" +
+                "Total Gross Amount: 320.3\n" +
+                "Total Netto Amount: 310.0\n" +
+                "Total Tax Amount: 10.3", invoice.print());
     }
 
     @Test
@@ -195,7 +256,18 @@ public class InvoiceTest {
         invoice.addProduct(new DairyProduct("Kozi Serek", new BigDecimal("10")), 3);
         // 1000x pinezka - price: 10
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
-        Assert.assertEquals("", invoice.print());
+        Assert.assertEquals("Invoice Number: 18\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Pinezka, 1000.0, 0.01, 10.0\n" +
+                "Kozi Serek, 3.0, 10.0, 30.0\n" +
+                "Kubek, 2.0, 5.0, 10.0\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 3\n" +
+                "Total Gross Amount: 54.7\n" +
+                "Total Netto Amount: 50.0\n" +
+                "Total Tax Amount: 4.7", invoice.print());
     }
 
     @Test
@@ -206,6 +278,17 @@ public class InvoiceTest {
         invoice.addProduct(new DairyProduct("Chedar", new BigDecimal("10")), 3);
         // 1000x pinezka - price with tax: 12.30
         invoice.addProduct(new OtherProduct("Pinezka", new BigDecimal("0.01")), 1000);
-        Assert.assertEquals("",invoice.print());
+        Assert.assertEquals("Invoice Number: 1\n" +
+                "Product, Amount, Tax, Neto Price, Netto Value\n" +
+                "\n" +
+                "Chedar, 3.0, 10.0, 30.0\n" +
+                "Chleb, 2.0, 5.0, 10.0\n" +
+                "Pinezka, 1000.0, 0.01, 10.0\n" +
+                "\n" +
+                "\n" +
+                "Total Products: 3\n" +
+                "Total Gross Amount: 54.7\n" +
+                "Total Netto Amount: 50.0\n" +
+                "Total Tax Amount: 4.7",invoice.print());
     }
 }
