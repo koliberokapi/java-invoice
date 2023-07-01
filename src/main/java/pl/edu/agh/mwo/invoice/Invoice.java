@@ -1,5 +1,6 @@
 package pl.edu.agh.mwo.invoice;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,28 +52,49 @@ public class Invoice {
         return totalGross;
     }
 
+    public BigDecimal getTotalProductsNumber() {
+        BigDecimal totalProductsNumber = BigDecimal.ZERO;
+        for (Product product :products.keySet()) {
+            BigDecimal quantity = new BigDecimal(products.get(product));
+            totalProductsNumber = totalProductsNumber.add(quantity);
+        }
+        return totalProductsNumber;
+    }
+
+    public  Map<Product, Integer> uniqueProducts() {
+        return new HashMap<>();
+    }
+
+
+
     public String print() {
         String invoiceSummary = "Invoice Number: " + getInvoiceNumber() + "\n"
-                + "Product, Amount, Tax, Neto Price, Netto Value" + "\n\n";
+                + "Product, Amount, Tax, Netto Price, Netto Value" + "\n\n";
+
 
         String productsDetail = products.entrySet().stream()
                 .map(entry -> entry.getKey().getName()
-                        + ", " + entry.getValue().doubleValue()
+                        + ", " + entry.getValue()
+                        + ", " + entry.getKey().getTaxPercent().doubleValue()
                         + ", " + entry.getKey().getPrice().doubleValue()
                         + ", " + entry.getKey().getPrice().doubleValue()
-                        * entry.getValue().doubleValue())
+                                * entry.getValue().doubleValue())
                 .sorted()
                 .collect(Collectors.joining("\n"));
 
-        String totalProducts = "\n\n" + "Total Products: " + products.size();
+        String totalItems = "\n\n" + "Total items: " + products.size();
 
-        String totalAmountDetail = "Total Gross Amount: " + getGrossTotal().doubleValue() + "\n"
-                + "Total Netto Amount: " + getNetTotal().doubleValue() +  "\n"
-                + "Total Tax Amount: " + getTaxTotal().doubleValue();
+        String totalProducts = "Total Products: " + getTotalProductsNumber().intValueExact();
+
+        String totalAmountDetail = String.format("Total Gross Amount: "
+                + getGrossTotal().doubleValue() + "\n"
+                + "Total Netto Amount: " + getNetTotal().doubleValue() + "\n"
+                + "Total Tax Amount: " + getTaxTotal().doubleValue());
 
 
 
-        return invoiceSummary + productsDetail + "\n" + totalProducts + "\n" + totalAmountDetail;
+        return invoiceSummary + productsDetail + "\n" + totalItems
+                + "\n" + totalProducts + "\n" + totalAmountDetail;
     }
 
 }
