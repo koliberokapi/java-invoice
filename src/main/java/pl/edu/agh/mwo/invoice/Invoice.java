@@ -1,11 +1,11 @@
 package pl.edu.agh.mwo.invoice;
 
-import java.util.Collections;
 import java.util.HashMap;
+
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.math.BigDecimal;
 import pl.edu.agh.mwo.invoice.product.Product;
+
 
 public class Invoice {
     private static int invoiceCounter = 0; // to generate unique invoice numbers
@@ -52,39 +52,49 @@ public class Invoice {
         return totalGross;
     }
 
-    public BigDecimal getTotalProductsNumber() {
-        BigDecimal totalProductsNumber = BigDecimal.ZERO;
+    public Integer getTotalProductsNumber() {
+        Integer totalProductsNumber = 0;
         for (Product product :products.keySet()) {
-            BigDecimal quantity = new BigDecimal(products.get(product));
-            totalProductsNumber = totalProductsNumber.add(quantity);
+            Integer quantity = products.get(product);
+            totalProductsNumber = totalProductsNumber + quantity;
         }
         return totalProductsNumber;
     }
-
-    public  Map<Product, Integer> uniqueProducts() {
-        return new HashMap<>();
-    }
-
-
 
     public String print() {
         String invoiceSummary = "Invoice Number: " + getInvoiceNumber() + "\n"
                 + "Product, Amount, Tax, Netto Price, Netto Value" + "\n\n";
 
+        Map<String, Integer> productNameToQuantity = new HashMap<>();
 
-        String productsDetail = products.entrySet().stream()
-                .map(entry -> entry.getKey().getName()
-                        + ", " + entry.getValue()
-                        + ", " + entry.getKey().getTaxPercent().doubleValue()
-                        + ", " + entry.getKey().getPrice().doubleValue()
-                        + ", " + entry.getKey().getPrice().doubleValue()
-                                * entry.getValue().doubleValue())
-                .sorted()
-                .collect(Collectors.joining("\n"));
+        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
 
-        String totalItems = "\n\n" + "Total items: " + products.size();
+            String productName = product.getName();
 
-        String totalProducts = "Total Products: " + getTotalProductsNumber().intValueExact();
+            productNameToQuantity.put(productName,
+                    productNameToQuantity.getOrDefault(productName, 0) + quantity);
+        }
+
+        StringBuilder detail = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : productNameToQuantity.entrySet()) {
+            String productName = entry.getKey();
+            int quantity = entry.getValue();
+
+            double totalForProduct = getProductTotal(productName, quantity);
+
+            detail.append(productName)
+                    .append(", ").append(quantity)
+                    .append(", ").append(getProductTaxPercent(productName))
+                    .append(", ").append(getProductPrice(productName))
+                    .append(", ").append(totalForProduct)
+                    .append("\n");
+        }
+
+        String totalItems = "\n" + "Total items: " + productNameToQuantity.size();
+
+        String totalProducts = "Total Products: " + getTotalProductsNumber();
 
         String totalAmountDetail = String.format("Total Gross Amount: "
                 + getGrossTotal().doubleValue() + "\n"
@@ -93,8 +103,35 @@ public class Invoice {
 
 
 
-        return invoiceSummary + productsDetail + "\n" + totalItems
+        return invoiceSummary + detail + "\n" + totalItems
                 + "\n" + totalProducts + "\n" + totalAmountDetail;
+    }
+
+    private double getProductTotal(String productName, int quantity) {
+        for (Product product : products.keySet()) {
+            if (product.getName().equals(productName)) {
+                return product.getPrice().multiply(BigDecimal.valueOf(quantity)).doubleValue();
+            }
+        }
+        return 0.0; // Handling case where the product is not found
+    }
+
+    private double getProductPrice(String productName) {
+        for (Product product : products.keySet()) {
+            if (product.getName().equals(productName)) {
+                return product.getPrice().doubleValue();
+            }
+        }
+        return 0.0; // Handling case where the product is not found
+    }
+
+    private double getProductTaxPercent(String productName) {
+        for (Product product : products.keySet()) {
+            if (product.getName().equals(productName)) {
+                return product.getTaxPercent().doubleValue();
+            }
+        }
+        return 0.0; // Handling case where the product is not found
     }
 
 }
