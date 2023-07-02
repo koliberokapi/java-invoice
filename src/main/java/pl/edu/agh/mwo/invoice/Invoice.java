@@ -63,7 +63,7 @@ public class Invoice {
 
     public String print() {
         String invoiceSummary = "Invoice Number: " + getInvoiceNumber() + "\n"
-                + "Product, Amount, Tax, Netto Price, Netto Value" + "\n\n";
+                + "Product, Amount, Tax, Akcyza, Netto Price, Netto Value" + "\n\n";
 
         Map<String, Integer> productNameToQuantity = new HashMap<>();
 
@@ -87,6 +87,7 @@ public class Invoice {
             detail.append(productName)
                     .append(", ").append(quantity)
                     .append(", ").append(getProductTaxPercent(productName))
+                    .append(", ").append(getProductAkcyza(productName))
                     .append(", ").append(getProductPrice(productName))
                     .append(", ").append(totalForProduct)
                     .append("\n");
@@ -111,6 +112,15 @@ public class Invoice {
         for (Product product : products.keySet()) {
             if (product.getName().equals(productName)) {
                 return product.getPrice().multiply(BigDecimal.valueOf(quantity)).doubleValue();
+            }
+        }
+        return 0.0; // Handling case where the product is not found
+    }
+
+    private double getProductAkcyza(String productName) {
+        for (Product product : products.keySet()) {
+            if (product.getName().equals(productName)) {
+                return product.getAkcyza().doubleValue();
             }
         }
         return 0.0; // Handling case where the product is not found
